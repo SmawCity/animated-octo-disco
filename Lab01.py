@@ -10,7 +10,6 @@
 #      -total time in hours including reading the assignment and submitting the program-
 
 from fileinput import filename
-import json
 
 # The characters used in the Tic-Tac-Too board.
 # These are constants and therefore should never have to change.
@@ -21,25 +20,22 @@ BLANK = ' '
 # A blank Tic-Tac-Toe board. We should not need to change this board;
 # it is only used to reset the board to blank. This should be the format
 # of the code in the JSON file.
-blank_board = {  
-            "board": [
-                BLANK, BLANK, BLANK,
-                BLANK, BLANK, BLANK,
-                BLANK, BLANK, BLANK ]
-        }
+blank_board = [BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK]
 
 def read_board(filename):
     '''Read the previously existing board from the file if it exists.'''
-    with open(filename, 'r') as b:
-        filename = json.load(b)
-        board = filename.get('board')
+    with open(filename) as b:
+        board = []
+        for line in b:
+            line = line.strip("\n")
+            board.append(line)
         return board
 
 def save_board(filename, board):
     '''Save the current game to a file.'''
-    board = {'board': board}
     with open(filename, 'w') as f:
-        board = json.dump(board, f)
+            for item in board:
+                f.write(f"{item}\n")
 
     
 
@@ -75,7 +71,7 @@ def play_game(board):
             display_board(board)
             selection = input("Enter 'q' to suspend your game. Otherwise, enter a number from 1 to 9 where the following numbers correspond to the locations on the grid: ")
             if selection == 'q':
-                save_board('tictactoe.json', board)
+                save_board('tictactoe.txt', board)
                 return False
             else:
                 board[int(selection)-1] = X
@@ -83,12 +79,12 @@ def play_game(board):
             display_board(board)
             selection = input("Enter 'q' to suspend your game. Otherwise, enter a number from 1 to 9 where the following numbers correspond to the locations on the grid: ")
             if selection == 'q':
-                save_board('tictactoe.json', board)
+                save_board('tictactoe.txt', board)
                 return False
             else:
                 board[int(selection)-1] = O
     display_board(board)
-    save_board('tictactoe.json', blank_board.get('board'))
+    save_board('tictactoe.txt', blank_board)
 
 def game_done(board, message=False):
     '''Determine if the game is finished.
@@ -142,6 +138,6 @@ print(" 7 | 8 | 9 \n")
 print("The current board is:")
 
 # The file read code, game loop code, and file close code goes here.
-board = read_board('tictactoe.json')
+save_board('tictactoe.txt', blank_board)
+board = read_board('tictactoe.txt')
 play_game(board)
-
