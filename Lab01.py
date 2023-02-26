@@ -138,6 +138,5 @@ print(" 7 | 8 | 9 \n")
 print("The current board is:")
 
 # The file read code, game loop code, and file close code goes here.
-save_board('tictactoe.txt', blank_board)
 board = read_board('tictactoe.txt')
 play_game(board)
